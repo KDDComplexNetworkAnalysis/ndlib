@@ -1,6 +1,5 @@
 from ndlib.models.compartments.Compartment import Compartiment
 import numpy as np
-import networkx as nx
 
 __author__ = 'Giulio Rossetti'
 __license__ = "BSD-2-Clause"
@@ -16,14 +15,19 @@ class NodeStochastic(Compartiment):
 
     def execute(self, node, graph, status, status_map, *args, **kwargs):
         neighbors = graph.neighbors(node)
-        if isinstance(graph, nx.DiGraph):
+        try:
+            directed = graph.directed
+        except AttributeError:
+            directed = graph.is_directed()
+
+        if directed:
             neighbors = graph.predecessors(node)
 
         p = np.random.random_sample()
         if self.trigger is None:
             triggered = 1
         else:
-            triggered = len([v for v in neighbors if status[v] == status_map[self.trigger]])
+            triggered = 1 if len([v for v in neighbors if status[v] == status_map[self.trigger]]) > 0 else 0
 
         test = p < self.rate * triggered
         if test:

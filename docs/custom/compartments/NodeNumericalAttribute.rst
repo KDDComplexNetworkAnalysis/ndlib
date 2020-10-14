@@ -4,9 +4,9 @@ Node Numerical Attribute
 
 Node Numerical Attribute compartments are used to evaluate events attached to numeric edge attributes.
 
-Consider the transition rule **Susceptible->Infected** that requires a that the susceptible node express a specific value
+Consider the transition rule **Susceptible->Infected** that requires that the susceptible node expresses a specific value
 of an internal numeric attribute, *attr*, to be satisfied (e.g. "Age" == 18).
-Such rule can be described by a simple compartment that models Node Numerical Attribute selection. Let's call il *NNA*.
+Such a rule can be described by a simple compartment that models Node Numerical Attribute selection. Let's call it *NNA*.
 
 The rule will take as input the *initial* node status (Susceptible), the *final* one (Infected) and the *NNA* compartment.
 *NNA* will thus require a probability (*beta*) of activation.
@@ -68,14 +68,14 @@ It restrain the rule evaluation to all those nodes connected at least to a "Susc
 	import random
 	import ndlib.models.ModelConfig as mc
 	import ndlib.models.CompositeModel as gc
-	import ndlib.models.compartments.NodeNumericalAttribute as ns
+	import ndlib.models.compartments.NodeNumericalAttribute as na
 
 	# Network generation
 	g = nx.erdos_renyi_graph(1000, 0.1)
 
 	# Setting edge attribute
 	attr = {n: {"Age": random.choice(range(0, 100))} for n in g.nodes()}
-	nx.set_edge_attributes(g, attr)
+	nx.set_node_attributes(g, attr)
 
 	# Composite Model instantiation
 	model = gc.CompositeModel(g)
@@ -87,15 +87,15 @@ It restrain the rule evaluation to all those nodes connected at least to a "Susc
 
 	# Compartment definition
 	c1 = na.NodeNumericalAttribute("Age", value=18, op="==", probability=0.6)
-	c2 = na.NodeNumericalAttribute("Age", value=(20, 25), op="IN", probability=0.6, triggering_status="Susceptible")
+	c2 = na.NodeNumericalAttribute("Age", value=[20, 25], op="IN", probability=0.6, triggering_status="Susceptible")
 
 	# Rule definition
 	model.add_rule("Susceptible", "Infected", c1)
-	model.add_rule("Infected", "Recovered", c2)
+	model.add_rule("Infected", "Removed", c2)
 
 	# Model initial status configuration
 	config = mc.Configuration()
-	config.add_model_parameter('percentage_infected', 0)
+	config.add_model_parameter('fraction_infected', 0)
 
 	# Simulation execution
 	model.set_initial_status(config)

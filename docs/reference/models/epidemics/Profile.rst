@@ -8,7 +8,7 @@ The Profile model assumes that the diffusion process is only apparent; each node
 
 In this scenario the peer pressure is completely ruled out from the overall model: it is not important how many of its neighbors have adopted a specific behaviour, if the node does not like it, it will not change its interests. 
 
-Each node has its own profile describing how many it is likely to accept a behaviour similar to the one that is currently spreading. 
+Each node has its own profile describing how likely it is to accept a behaviour similar to the one that is currently spreading.
 
 The diffusion process starts from a set of nodes that have already adopted a given behaviour S:
 
@@ -47,7 +47,7 @@ adopter_rate  Model  float in [0, 1]   0       False      Autonomous adoption
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The two options are mutually exclusive and the latter takes precedence over the former.
@@ -85,23 +85,23 @@ Execute Simulation
 Example
 -------
 
-In the code below is shown an example of instantiation and execution of a Profile model simulation on a random graph: we set the initial infected node set to the 10% of the overall population and assign a profile of 0.25 to all the nodes.
+In the code below is shown an example of instantiation and execution of a Profile model simulation on a random graph: we set the initial infected node set to the 10% of the overall population and assign a profile of 0.15 to all the nodes.
 
 .. code-block:: python
 
     import networkx as nx
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.epidemics.ProfileModel as pr
+    import ndlib.models.epidemics as ep
 
     # Network topology
     g = nx.erdos_renyi_graph(1000, 0.1)
 
     # Model selection
-    model = pr.ProfileModel(g)
+    model = ep.ProfileModel(g)
     config = mc.Configuration()
     config.add_model_parameter('blocked', 0)
     config.add_model_parameter('adopter_rate', 0)
-    config.add_model_parameter('percentage_infected', 0.1)
+    config.add_model_parameter('fraction_infected', 0.1)
 
     # Setting nodes parameters
     profile = 0.15

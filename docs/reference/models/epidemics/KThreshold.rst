@@ -38,7 +38,7 @@ threshold           Node   float in [0, 1]   0.1     False      Individual thres
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The initial blocked nodes can be defined via:
@@ -87,19 +87,19 @@ In the code below is shown an example of instantiation and execution of a Kertes
 
     import networkx as nx
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.epidemics.KerteszThresholdModel as ks
+    import ndlib.models.epidemics as ep
 
     # Network topology
     g = nx.erdos_renyi_graph(1000, 0.1)
 
     # Model selection
-    model = ks.KerteszThresholdModel(g)
+    model = ep.KerteszThresholdModel(g)
         
     # Model Configuration
     config = mc.Configuration()
     config.add_model_parameter('adopter_rate', 0.4)
     config.add_model_parameter('percentage_blocked', 0.1)
-    config.add_model_parameter('percentage_infected', 0.1)
+    config.add_model_parameter('fraction_infected', 0.1)
 
     # Setting node parameters
     threshold = 0.25

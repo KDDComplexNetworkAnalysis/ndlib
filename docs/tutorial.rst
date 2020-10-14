@@ -25,9 +25,9 @@ Let's start importing the required libraries
 .. code:: python
 
     import networkx as nx
-    import ndlib.models.epidemics.SIRModel as sir
+    import ndlib.models.epidemics as ep
 
-Once imported the selected model, SIR, and the networkx library we can initialize the simulation:
+Once imported the epidemic model module and the networkx library we can initialize the simulation:
 
 .. code:: python
 
@@ -35,7 +35,7 @@ Once imported the selected model, SIR, and the networkx library we can initializ
     g = nx.erdos_renyi_graph(1000, 0.1)
     
     # Model Selection
-    model = sir.SIRModel(g)
+    model = ep.SIRModel(g)
 
 ------------------------
 Configure the simulation
@@ -51,12 +51,13 @@ Each model has its own parameters: in order to completely instantiate the simula
     config = mc.Configuration()
     config.add_model_parameter('beta', 0.001)
     config.add_model_parameter('gamma', 0.01)
-    config.add_model_parameter("percentage_infected", 0.05)
+    config.add_model_parameter("fraction_infected", 0.05)
     model.set_initial_status(config)
 
 The model configuration allows to specify model parameters (as in this scenario) as well as nodes' and edges' ones (e.g.  individual thresholds).
 
-Moreover it allows to specify the initial percentage of infected nodes using the ``percentage_infected`` model parameter.
+Moreover it allows to specify the initial fraction of infected nodes using the 
+``fraction_infected`` model parameter.
 
 It is also possible to explicitly specify an initial set of infected nodes: see :ref:`model_conf` for the complete set of use cases.
 
@@ -116,19 +117,17 @@ Multiplots - implemented only for the ``bokeh`` provider - are also useful to co
 
 .. code:: python
 
-	import ndlib.models.epidemics.SISModel as sis
-	import ndlib.models.epidemics.SIModel as si
-	import ndlib.models.epidemics.ThresholdModel as th
+	import ndlib.models.epidemics as ep
 
 	vm = MultiPlot()
 	vm.add_plot(p)
 
 	# SIS
-	sis_model = sis.SISModel(g)
+	sis_model = ep.SISModel(g)
 	config = mc.Configuration()
 	config.add_model_parameter('beta', 0.001)
 	config.add_model_parameter('lambda', 0.01)
-	config.add_model_parameter("percentage_infected", 0.05)
+	config.add_model_parameter("fraction_infected", 0.05)
 	sis_model.set_initial_status(config)
 	iterations = sis_model.iteration_bunch(200)
 	trends = sis_model.build_trends(iterations)
@@ -138,10 +137,10 @@ Multiplots - implemented only for the ``bokeh`` provider - are also useful to co
 	vm.add_plot(p3)
 
 	# SI
-	si_model = si.SIModel(g)
+	si_model = ep.SIModel(g)
 	config = mc.Configuration()
 	config.add_model_parameter('beta', 0.001)
-	config.add_model_parameter("percentage_infected", 0.05)
+	config.add_model_parameter("fraction_infected", 0.05)
 	si_model.set_initial_status(config)
 	iterations = si_model.iteration_bunch(200)
 	trends = si_model.build_trends(iterations)
@@ -151,7 +150,7 @@ Multiplots - implemented only for the ``bokeh`` provider - are also useful to co
 	vm.add_plot(p4)
 
 	# Threshold
-	th_model = th.ThresholdModel(g)
+	th_model = ep.ThresholdModel(g)
 	config = mc.Configuration()
 
 	# Set individual node threshold
@@ -159,7 +158,7 @@ Multiplots - implemented only for the ``bokeh`` provider - are also useful to co
 	for n in g.nodes():
 		config.add_node_configuration("threshold", n, threshold)
 
-	config.add_model_parameter("percentage_infected", 0.30)
+	config.add_model_parameter("fraction_infected", 0.30)
 	th_model.set_initial_status(config)
 	iterations = th_model.iteration_bunch(60)
 	trends = th_model.build_trends(iterations)

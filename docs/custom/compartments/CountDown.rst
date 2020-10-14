@@ -4,7 +4,7 @@ Count Down
 
 Count Down compartments are used to evaluate time related deterministic events attached to network nodes.
 
-Consider the transition rule **Susceptible->Infected** that has an incubation period of *t* iterations.
+Consider the transition rule **Susceptible->Infected** that has an latent period of *t* iterations.
 
 Such rule can be described by a simple compartment that models Count Down behaviors. Let's call il *CD*.
 
@@ -65,7 +65,7 @@ It requires activates after 10 iteration.
 
 	# Model initial status configuration
 	config = mc.Configuration()
-	config.add_model_parameter('percentage_infected', 0.1)
+	config.add_model_parameter('fraction_infected', 0.1)
 
 	# Simulation execution
 	model.set_initial_status(config)

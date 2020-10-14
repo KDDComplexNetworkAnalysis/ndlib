@@ -38,7 +38,7 @@ q          Model  int in [0, V(G)]           True       Number of neighbours
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The two options are mutually exclusive and the latter takes precedence over the former.
@@ -83,16 +83,16 @@ In the code below is shown an example of instantiation and execution of a Q-Vote
 
     import networkx as nx
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.opinions.QVoterModel as qvt
+    import ndlib.models.opinions as op
 
     # Network topology
     g = nx.erdos_renyi_graph(1000, 0.1)
 
     # Model selection
-    model = qvt.QVoterModel(g)
+    model = op.QVoterModel(g)
     config = mc.Configuration()
     config.add_model_parameter("q", 5)
-    config.add_model_parameter('percentage_infected', 0.1)
+    config.add_model_parameter('fraction_infected', 0.1)
     
     model.set_initial_status(config)
 

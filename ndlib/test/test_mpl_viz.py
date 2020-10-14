@@ -9,9 +9,11 @@ from ndlib.viz.mpl.DiffusionPrevalence import DiffusionPrevalence
 from ndlib.viz.mpl.PrevalenceComparison import DiffusionPrevalenceComparison
 from ndlib.viz.mpl.TrendComparison import DiffusionTrendComparison
 from ndlib.viz.mpl.DiffusionTrend import DiffusionTrend
+from ndlib.viz.mpl.OpinionEvolution import OpinionEvolution
 
 import ndlib.models.ModelConfig as mc
 import ndlib.models.epidemics as epd
+import ndlib.models.opinions as op
 import ndlib.models.dynamic as dyn
 
 import os
@@ -29,7 +31,7 @@ class MplVizTest(unittest.TestCase):
         config = mc.Configuration()
         config.add_model_parameter('beta', 0.001)
         config.add_model_parameter('gamma', 0.01)
-        config.add_model_parameter("percentage_infected", 0.05)
+        config.add_model_parameter("fraction_infected", 0.05)
         model.set_initial_status(config)
         iterations = model.iteration_bunch(200)
         trends = model.build_trends(iterations)
@@ -49,7 +51,7 @@ class MplVizTest(unittest.TestCase):
         model = dyn.DynSIModel(dg)
         config = mc.Configuration()
         config.add_model_parameter('beta', 0.1)
-        config.add_model_parameter("percentage_infected", 0.1)
+        config.add_model_parameter("fraction_infected", 0.1)
         model.set_initial_status(config)
         iterations = model.execute_snapshots()
         trends = model.build_trends(iterations)
@@ -65,7 +67,7 @@ class MplVizTest(unittest.TestCase):
         config = mc.Configuration()
         config.add_model_parameter('beta', 0.001)
         config.add_model_parameter('gamma', 0.01)
-        config.add_model_parameter("percentage_infected", 0.05)
+        config.add_model_parameter("fraction_infected", 0.05)
         model.set_initial_status(config)
         iterations = model.iteration_bunch(200)
         trends = model.build_trends(iterations)
@@ -87,7 +89,7 @@ class MplVizTest(unittest.TestCase):
         cfg = mc.Configuration()
         cfg.add_model_parameter('beta', 0.001)
         cfg.add_model_parameter('gamma', 0.02)
-        cfg.add_model_parameter("percentage_infected", 0.01)
+        cfg.add_model_parameter("fraction_infected", 0.01)
         model.set_initial_status(cfg)
 
         iterations = model.iteration_bunch(200)
@@ -96,7 +98,7 @@ class MplVizTest(unittest.TestCase):
         model1 = epd.SIModel(g)
         cfg = mc.Configuration()
         cfg.add_model_parameter('beta', 0.001)
-        cfg.add_model_parameter("percentage_infected", 0.01)
+        cfg.add_model_parameter("fraction_infected", 0.01)
         model1.set_initial_status(cfg)
 
         iterations = model1.iteration_bunch(200)
@@ -118,7 +120,7 @@ class MplVizTest(unittest.TestCase):
         cfg = mc.Configuration()
         cfg.add_model_parameter('beta', 0.001)
         cfg.add_model_parameter('gamma', 0.02)
-        cfg.add_model_parameter("percentage_infected", 0.01)
+        cfg.add_model_parameter("fraction_infected", 0.01)
         model.set_initial_status(cfg)
 
         iterations = model.iteration_bunch(200)
@@ -127,7 +129,7 @@ class MplVizTest(unittest.TestCase):
         model1 = epd.SIModel(g)
         cfg = mc.Configuration()
         cfg.add_model_parameter('beta', 0.001)
-        cfg.add_model_parameter("percentage_infected", 0.01)
+        cfg.add_model_parameter("fraction_infected", 0.01)
         model1.set_initial_status(cfg)
 
         iterations = model1.iteration_bunch(200)
@@ -137,6 +139,25 @@ class MplVizTest(unittest.TestCase):
 
         viz.plot("trend_comparison.pdf")
         os.remove("trend_comparison.pdf")
+
+    def test_opinion_viz(self):
+        g = nx.complete_graph(50)
+
+        model = op.AlgorithmicBiasModel(g)
+
+        # Model configuration
+        config = mc.Configuration()
+        config.add_model_parameter("epsilon", 0.32)
+        config.add_model_parameter("gamma", 0)
+        model.set_initial_status(config)
+
+        # Simulation execution
+        iterations = model.iteration_bunch(50)
+
+        viz = OpinionEvolution(model, iterations)
+        viz.plot("opinion_ev.png")
+        os.remove("opinion_ev.png")
+
 
 if __name__ == '__main__':
     unittest.main()

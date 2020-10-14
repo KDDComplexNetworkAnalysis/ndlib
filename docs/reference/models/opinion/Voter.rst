@@ -30,7 +30,7 @@ Parameters
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The initial blocked nodes can be defined via:
@@ -80,15 +80,15 @@ In the code below is shown an example of instantiation and execution of a Voter 
 
     import networkx as nx
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.opinions.VoterModel as vt
+    import ndlib.models.opinions as op
 
     # Network topology
     g = nx.erdos_renyi_graph(1000, 0.1)
 
     # Model selection
-    model = vt.VoterModel(g)
+    model = op.VoterModel(g)
     config = mc.Configuration()
-    config.add_model_parameter('percentage_infected', 0.1)
+    config.add_model_parameter('fraction_infected', 0.1)
     
     model.set_initial_status(config)
 

@@ -45,7 +45,7 @@ adopter_rate  Model  float in [0, 1]   0       False      Autonomous adoption
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The two options are mutually exclusive and the latter takes precedence over the former.
@@ -92,7 +92,7 @@ In the code below is shown an example of instantiation and execution of a Profil
     import networkx as nx
     import dynetx as dn
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.dynamic.DynProfileModel as pro
+    import ndlib.models.dynamic as dm
     from past.builtins import xrange
 
     # Dynamic Network topology
@@ -103,11 +103,11 @@ In the code below is shown an example of instantiation and execution of a Profil
         dg.add_interactions_from(g.edges(), t)
 
     # Model selection
-    model = pro.DynProfileModel(dg)
+    model = dm.DynProfileModel(dg)
     config = mc.Configuration()
     config.add_model_parameter('blocked', 0)
     config.add_model_parameter('adopter_rate', 0)
-    config.add_model_parameter('percentage_infected', 0.1)
+    config.add_model_parameter('fraction_infected', 0.1)
 
     # Setting nodes parameters
     profile = 0.15

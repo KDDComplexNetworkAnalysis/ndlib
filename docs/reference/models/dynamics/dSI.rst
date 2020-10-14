@@ -37,7 +37,7 @@ beta   Model  float in [0, 1]           True       Infection probability
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The two options are mutually exclusive and the latter takes precedence over the former.
@@ -82,7 +82,7 @@ In the code below is shown an example of instantiation and execution of an DynSI
     import networkx as nx
     import dynetx as dn
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.dynamic.DynSIModel as si
+    import ndlib.models.dynamic as dm
     from past.builtins import xrange
 
     # Dynamic Network topology
@@ -93,12 +93,12 @@ In the code below is shown an example of instantiation and execution of an DynSI
         dg.add_interactions_from(g.edges(), t)
 
     # Model selection
-    model = si.DynSIModel(dg)
+    model = dm.DynSIModel(dg)
 
     # Model Configuration
     config = mc.Configuration()
     config.add_model_parameter('beta', 0.01)
-    config.add_model_parameter("percentage_infected", 0.1)
+    config.add_model_parameter("fraction_infected", 0.1)
     model.set_initial_status(config)
 
     # Simulate snapshot based execution

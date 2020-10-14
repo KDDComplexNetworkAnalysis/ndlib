@@ -1,7 +1,6 @@
 from ..DiffusionModel import DiffusionModel
 import numpy as np
 import future.utils
-import networkx as nx
 
 __author__ = 'Giulio Rossetti'
 __license__ = "BSD-2-Clause"
@@ -15,13 +14,13 @@ class IndependentCascadesModel(DiffusionModel):
         :param threshold: The edge threshold. As default a value of 0.1 is assumed for all edges.
     """
 
-    def __init__(self, graph):
+    def __init__(self, graph, seed=None):
         """
              Model Constructor
 
              :param graph: A networkx graph object
          """
-        super(self.__class__, self).__init__(graph)
+        super(self.__class__, self).__init__(graph, seed)
         self.available_statuses = {
             "Susceptible": 0,
             "Infected": 1,
@@ -62,7 +61,7 @@ class IndependentCascadesModel(DiffusionModel):
                 return {"iteration": 0, "status": {},
                         "node_count": node_count.copy(), "status_delta": status_delta.copy()}
 
-        for u in self.graph.nodes():
+        for u in self.graph.nodes:
             if self.status[u] != 1:
                 continue
 
@@ -80,7 +79,7 @@ class IndependentCascadesModel(DiffusionModel):
                         if 'threshold' in self.params['edges']:
                             if key in self.params['edges']['threshold']:
                                 threshold = self.params['edges']['threshold'][key]
-                            elif (v, u) in self.params['edges']['threshold'] and not nx.is_directed(self.graph):
+                            elif (v, u) in self.params['edges']['threshold'] and not self.graph.directed:
                                 threshold = self.params['edges']['threshold'][(v, u)]
 
                         flip = np.random.random_sample()

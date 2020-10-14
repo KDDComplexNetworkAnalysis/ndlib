@@ -38,7 +38,7 @@ nu     Model  float in [0, 1]           True
 
 The initial infection status can be defined via:
 
-    - **percentage_infected**: Model Parameter, float in [0, 1]
+    - **fraction_infected**: Model Parameter, float in [0, 1]
     - **Infected**: Status Parameter, set of nodes
 
 The two options are mutually exclusive and the latter takes precedence over the former.
@@ -76,26 +76,26 @@ Execute Simulation
 Example
 -------
 
-In the code below is shown an example of instantiation and execution of an SEIR simulation on a random graph: we set the initial set of infected nodes as % of the overall population, a probability of infection of 1%, a removal probability of 0.5% and an incubation period of 5% (e.g. 20 iterations).
+In the code below is shown an example of instantiation and execution of an SEIR simulation on a random graph: we set the initial set of infected nodes as % of the overall population, a probability of infection of 1%, a removal probability of 0.5% and an latent period of 5% (e.g. 20 iterations).
 
 .. code-block:: python
 
     import networkx as nx
     import ndlib.models.ModelConfig as mc
-    import ndlib.models.epidemics.SWIRModel as swir
+    import ndlib.models.epidemics as ep
 
     # Network topology
     g = nx.erdos_renyi_graph(1000, 0.1)
 
     # Model selection
-    model = swir.SWIRModel(g)
+    model = ep.SWIRModel(g)
 
     # Model Configuration
     cfg = mc.Configuration()
     cfg.add_model_parameter('kappa', 0.01)
     cfg.add_model_parameter('mu', 0.005)
     cfg.add_model_parameter('nu', 0.05)
-    cfg.add_model_parameter("percentage_infected", 0.05)
+    cfg.add_model_parameter("fraction_infected", 0.05)
     model.set_initial_status(cfg)
 
     # Simulation execution
